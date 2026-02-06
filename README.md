@@ -64,6 +64,12 @@ The `SwitchEnv` environment provides a more modular approach, especially useful 
         \end{SwitchEnv}
     }
 \end{SwitchEnv}
+
+\begin{SwitchIntEnv}{1}
+    \Case{1}{This is case 1.}
+    \Case{2}{This is case 2.}
+    \Default{This is default.}
+\end{SwitchIntEnv}
 ```
 
 ## License
