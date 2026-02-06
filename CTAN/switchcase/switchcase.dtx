@@ -29,9 +29,9 @@
 %<package>\tl_new:N \l_switchcase_saved_cases_tl
 %<package>\tl_new:N \l_switchcase_saved_default_tl
 %<package>\tl_new:N \l_switchcase_input_tl
-\tl_new:N \l_switchcase_tmpa_tl
-\tl_new:N \l_switchcase_tmpb_tl
-\box_new:N \l_switchcase_junk_box
+%<package>\tl_new:N \l_switchcase_tmpa_tl
+%<package>\tl_new:N \l_switchcase_tmpb_tl
+%<package>\box_new:N \l_switchcase_junk_box
 %
 %<*driver>
 \documentclass{ltxdoc}
@@ -100,6 +100,16 @@
 % \quad |\Case{|\meta{val2}|}{|\meta{code2}|}|\\
 % \quad |\Default{|\meta{default code}|}|\\
 % |\end{SwitchEnv}|
+% \end{quote}
+%
+% \DescribeEnv{SwitchIntEnv}
+% The |SwitchIntEnv| environment is the integer version of |SwitchEnv|.
+% \begin{quote}
+% |\begin{SwitchIntEnv}{|\meta{integer}|}|\\
+% \quad |\Case{|\meta{val1}|}{|\meta{code1}|}|\\
+% \quad |\Case{|\meta{val2}|}{|\meta{code2}|}|\\
+% \quad |\Default{|\meta{default code}|}|\\
+% |\end{SwitchIntEnv}|
 % \end{quote}
 %
 % \StopEventually{\PrintIndex}
@@ -175,6 +185,28 @@
 }{
     \vbox_set_end:
     \exp_args:Nooo \str_case:nnF { \l_switchcase_input_tl } { \g_switchcase_cases_tl } { \g_switchcase_default_tl }
+    \tl_gset:Nn \g_switchcase_cases_tl { \l_switchcase_saved_cases_tl }
+    \tl_gset:Nn \g_switchcase_default_tl { \l_switchcase_saved_default_tl }
+    \ignorespaces
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{SwitchIntEnv}
+% Environment wrapper for an integer-based switch-case selection.
+%    \begin{macrocode}
+\NewDocumentEnvironment{SwitchIntEnv}{+m}{
+    \tl_set:Nn \l_switchcase_saved_cases_tl { \g_switchcase_cases_tl }
+    \tl_set:Nn \l_switchcase_saved_default_tl { \g_switchcase_default_tl }
+    \tl_gclear:N \g_switchcase_cases_tl
+    \tl_gclear:N \g_switchcase_default_tl
+    \tl_set:Nn \l_switchcase_input_tl {#1}
+    \tl_trim_spaces:N \l_switchcase_input_tl
+    \vbox_set:Nw \l_switchcase_junk_box
+    \ignorespaces
+}{
+    \vbox_set_end:
+    \exp_args:Nooo \int_case:nnF { \l_switchcase_input_tl } { \g_switchcase_cases_tl } { \g_switchcase_default_tl }
     \tl_gset:Nn \g_switchcase_cases_tl { \l_switchcase_saved_cases_tl }
     \tl_gset:Nn \g_switchcase_default_tl { \l_switchcase_saved_default_tl }
     \ignorespaces

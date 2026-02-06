@@ -75,6 +75,22 @@
     \tl_gset:Nn \g_switchcase_default_tl { \l_switchcase_saved_default_tl }
     \ignorespaces
 }
+\NewDocumentEnvironment{SwitchIntEnv}{+m}{
+    \tl_set:Nn \l_switchcase_saved_cases_tl { \g_switchcase_cases_tl }
+    \tl_set:Nn \l_switchcase_saved_default_tl { \g_switchcase_default_tl }
+    \tl_gclear:N \g_switchcase_cases_tl
+    \tl_gclear:N \g_switchcase_default_tl
+    \tl_set:Nn \l_switchcase_input_tl {#1}
+    \tl_trim_spaces:N \l_switchcase_input_tl
+    \vbox_set:Nw \l_switchcase_junk_box
+    \ignorespaces
+}{
+    \vbox_set_end:
+    \exp_args:Nooo \int_case:nnF { \l_switchcase_input_tl } { \g_switchcase_cases_tl } { \g_switchcase_default_tl }
+    \tl_gset:Nn \g_switchcase_cases_tl { \l_switchcase_saved_cases_tl }
+    \tl_gset:Nn \g_switchcase_default_tl { \l_switchcase_saved_default_tl }
+    \ignorespaces
+}
 \endinput
 %%
 %% End of file `switchcase.sty'.

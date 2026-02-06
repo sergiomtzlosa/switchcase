@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage{switchcase}
+\usepackage[T1]{fontenc}
+
+\begin{document}
+
+\section*{Testing SwitchIntEnv}
+
+\subsection*{Test 1: Case 1}
+Value is 1.
+\begin{SwitchIntEnv}{1}
+    \Case{1}{This is case 1.}
+    \Case{2}{This is case 2.}
+    \Default{This is default.}
+\end{SwitchIntEnv}
+
+\subsection*{Test 2: Case 2}
+Value is 2.
+\begin{SwitchIntEnv}{2}
+    \Case{1}{This is case 1.}
+    \Case{2}{This is case 2.}
+    \Default{This is default.}
+\end{SwitchIntEnv}
+
+\subsection*{Test 3: Default}
+Value is 3.
+\begin{SwitchIntEnv}{3}
+    \Case{1}{This is case 1.}
+    \Case{2}{This is case 2.}
+    \Default{This is default.}
+\end{SwitchIntEnv}
+
+\subsection*{Test 4: Math in input}
+Value is 1+1.
+\begin{SwitchIntEnv}{1+1}
+    \Case{1}{This is case 1.}
+    \Case{2}{This is case 2.}
+    \Default{This is default.}
+\end{SwitchIntEnv}
+
+\end{document}
