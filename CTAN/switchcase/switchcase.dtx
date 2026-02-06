@@ -24,9 +24,14 @@
 %<package>\RequirePackage{xparse}
 %<package>\ProvidesExplPackage{switchcase}
 %<package>  {2026/02/06}{0.1}{Switch-case implementation using expl3}
-%<package>\tl_new:N \l_switchcase_cases_tl
-%<package>\tl_new:N \l_switchcase_default_tl
+%<package>\tl_new:N \g_switchcase_cases_tl
+%<package>\tl_new:N \g_switchcase_default_tl
+%<package>\tl_new:N \l_switchcase_saved_cases_tl
+%<package>\tl_new:N \l_switchcase_saved_default_tl
 %<package>\tl_new:N \l_switchcase_input_tl
+\tl_new:N \l_switchcase_tmpa_tl
+\tl_new:N \l_switchcase_tmpb_tl
+\box_new:N \l_switchcase_junk_box
 %
 %<*driver>
 \documentclass{ltxdoc}
@@ -108,8 +113,11 @@
 % \begin{macro}{\Switch}
 % A LaTeX2e wrapper for |\str_case:nnF|.
 %    \begin{macrocode}
-\NewDocumentCommand{\Switch}{m m O{}}{
-    \str_case:nnF {#1} {#2} {#3}
+\NewDocumentCommand{\Switch}{m +m +O{}}{
+    \tl_set:Nn \l_switchcase_tmpa_tl {#1}
+    \tl_trim_spaces:N \l_switchcase_tmpa_tl
+    \exp_args:No \str_case:nnF { \l_switchcase_tmpa_tl } {#2} {#3}
+    \ignorespaces
 }
 %    \end{macrocode}
 % \end{macro}
@@ -117,8 +125,11 @@
 % \begin{macro}{\IntSwitch}
 % A LaTeX2e wrapper for |\int_case:nnF|.
 %    \begin{macrocode}
-\NewDocumentCommand{\IntSwitch}{m m O{}}{
-    \int_case:nnF {#1} {#2} {#3}
+\NewDocumentCommand{\IntSwitch}{m +m +O{}}{
+    \tl_set:Nn \l_switchcase_tmpa_tl {#1}
+    \tl_trim_spaces:N \l_switchcase_tmpa_tl
+    \exp_args:No \int_case:nnF { \l_switchcase_tmpa_tl } {#2} {#3}
+    \ignorespaces
 }
 %    \end{macrocode}
 % \end{macro}
@@ -126,8 +137,13 @@
 % \begin{macro}{\Case}
 % Appends a case to the current list of cases.
 %    \begin{macrocode}
-\NewDocumentCommand{\Case}{m m}{
-    \tl_put_right:Nn \l_switchcase_cases_tl { {#1}{#2} }
+\NewDocumentCommand{\Case}{+m +m}{
+    \tl_set:Nn \l_switchcase_tmpa_tl {#1}
+    \tl_set:Nn \l_switchcase_tmpb_tl {#2}
+    \tl_trim_spaces:N \l_switchcase_tmpa_tl
+    \tl_trim_spaces:N \l_switchcase_tmpb_tl
+    \tl_gput_right:Nx \g_switchcase_cases_tl { { \exp_not:V \l_switchcase_tmpa_tl } { \exp_not:V \l_switchcase_tmpb_tl } }
+    \ignorespaces
 }
 %    \end{macrocode}
 % \end{macro}
@@ -135,8 +151,11 @@
 % \begin{macro}{\Default}
 % Sets the default code to execute if no case matches.
 %    \begin{macrocode}
-\NewDocumentCommand{\Default}{m}{
-    \tl_set:Nn \l_switchcase_default_tl { #1 }
+\NewDocumentCommand{\Default}{+m}{
+    \tl_set:Nn \l_switchcase_tmpa_tl {#1}
+    \tl_trim_spaces:N \l_switchcase_tmpa_tl
+    \tl_gset:NV \g_switchcase_default_tl \l_switchcase_tmpa_tl
+    \ignorespaces
 }
 %    \end{macrocode}
 % \end{macro}
@@ -144,12 +163,21 @@
 % \begin{environment}{SwitchEnv}
 % Environment wrapper for a string-based switch-case selection.
 %    \begin{macrocode}
-\NewDocumentEnvironment{SwitchEnv}{m}{
+\NewDocumentEnvironment{SwitchEnv}{+m}{
+    \tl_set:Nn \l_switchcase_saved_cases_tl { \g_switchcase_cases_tl }
+    \tl_set:Nn \l_switchcase_saved_default_tl { \g_switchcase_default_tl }
+    \tl_gclear:N \g_switchcase_cases_tl
+    \tl_gclear:N \g_switchcase_default_tl
     \tl_set:Nn \l_switchcase_input_tl {#1}
-    \tl_clear:N \l_switchcase_cases_tl
-    \tl_clear:N \l_switchcase_default_tl
+    \tl_trim_spaces:N \l_switchcase_input_tl
+    \vbox_set:Nw \l_switchcase_junk_box
+    \ignorespaces
 }{
-    \exp_args:NVV \str_case:nnF \l_switchcase_input_tl \l_switchcase_cases_tl { \l_switchcase_default_tl }
+    \vbox_set_end:
+    \exp_args:Nooo \str_case:nnF { \l_switchcase_input_tl } { \g_switchcase_cases_tl } { \g_switchcase_default_tl }
+    \tl_gset:Nn \g_switchcase_cases_tl { \l_switchcase_saved_cases_tl }
+    \tl_gset:Nn \g_switchcase_default_tl { \l_switchcase_saved_default_tl }
+    \ignorespaces
 }
 %    \end{macrocode}
 % \end{environment}
