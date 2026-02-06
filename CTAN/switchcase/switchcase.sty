@@ -1,0 +1,52 @@
+%%
+%% This is file `switchcase.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% switchcase.dtx  (with options: `package')
+%% 
+%% This is a generated file.
+%% 
+%% Copyright (C) 2026 by Sergio Martinez-Losa
+%% 
+%% This file may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in:
+%% 
+%%    http://www.latex-project.org/lppl.txt
+%% 
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%% 
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\RequirePackage{expl3}
+\RequirePackage{xparse}
+\ProvidesExplPackage{switchcase}
+  {2026/02/06}{0.1}{Switch-case implementation using expl3}
+\tl_new:N \l_switchcase_cases_tl
+\tl_new:N \l_switchcase_default_tl
+\tl_new:N \l_switchcase_input_tl
+\NewDocumentCommand{\Switch}{m m O{}}{
+    \str_case:nnF {#1} {#2} {#3}
+}
+\NewDocumentCommand{\IntSwitch}{m m O{}}{
+    \int_case:nnF {#1} {#2} {#3}
+}
+\NewDocumentCommand{\Case}{m m}{
+    \tl_put_right:Nn \l_switchcase_cases_tl { {#1}{#2} }
+}
+\NewDocumentCommand{\Default}{m}{
+    \tl_set:Nn \l_switchcase_default_tl { #1 }
+}
+\NewDocumentEnvironment{SwitchEnv}{m}{
+    \tl_set:Nn \l_switchcase_input_tl {#1}
+    \tl_clear:N \l_switchcase_cases_tl
+    \tl_clear:N \l_switchcase_default_tl
+}{
+    \exp_args:NVV \str_case:nnF \l_switchcase_input_tl \l_switchcase_cases_tl { \l_switchcase_default_tl }
+}
+\endinput
+%%
+%% End of file `switchcase.sty'.

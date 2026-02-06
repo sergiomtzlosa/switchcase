@@ -1,0 +1,22 @@
+\documentclass{article}
+\usepackage{switchcase}
+
+\begin{document}
+
+\section{Testing Macro as Key}
+\def\mykey{SpecialValue}
+
+Input "SpecialValue":
+\begin{SwitchEnv}{SpecialValue}
+    \Case{\mykey}{Found by macro key!}
+    \Default{NOT FOUND}
+\end{SwitchEnv}
+
+\section{Testing gdef inside Case}
+\begin{SwitchEnv}{A}
+    \Case{A}{\gdef\myglobalinside{Global from inside worked!}}
+\end{SwitchEnv}
+
+Global check: \myglobalinside
+
+\end{document}

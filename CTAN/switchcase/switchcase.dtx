@@ -1,0 +1,162 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 2026 by Sergio Martinez-Losa
+% -------------------------------------------
+%
+% This file may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in:
+%
+%    http://www.latex-project.org/lppl.txt
+%
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{switchcase.dtx}
+%</driver>
+%<package>\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+%<package>\RequirePackage{expl3}
+%<package>\RequirePackage{xparse}
+%<package>\ProvidesExplPackage{switchcase}
+%<package>  {2026/02/06}{0.1}{Switch-case implementation using expl3}
+%<package>\tl_new:N \l_switchcase_cases_tl
+%<package>\tl_new:N \l_switchcase_default_tl
+%<package>\tl_new:N \l_switchcase_input_tl
+%
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage{switchcase}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+  \DocInput{switchcase.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+% \GetFileInfo{switchcase.dtx}
+%
+% \title{The \textsf{switchcase} package\thanks{This document
+%   corresponds to \textsf{switchcase}~\fileversion, dated \filedate.}}
+% \author{Sergio Martinez-Losa}
+%
+% \maketitle
+%
+% \section{Introduction}
+%
+% The \textsf{switchcase} package provides a simple interface for switch-case
+% structures in LaTeX, built on top of the powerful \textsf{expl3} programming layer.
+%
+% \section{Usage}
+%
+% \DescribeMacro{\Switch}
+% The |\Switch| command performs a string-based case selection.
+% \begin{quote}
+% |\Switch{|\meta{string}|}{|\meta{cases}|}[|\meta{default}|]|
+% \end{quote}
+% The \meta{cases} should be provided as a sequence of alternating values and code blocks:
+% |{{val1}{code1}{val2}{code2}...}|.
+%
+% \DescribeMacro{\IntSwitch}
+% The |\IntSwitch| command performs an integer-based case selection.
+% \begin{quote}
+% |\IntSwitch{|\meta{integer}|}{|\meta{cases}|}[|\meta{default}|]|
+% \end{quote}
+%
+% \DescribeEnv{SwitchEnv}
+% The |SwitchEnv| environment allows for a more readable switch-case structure.
+% Inside the environment, use |\Case| to define cases and |\Default| for the
+% fallback.
+% \begin{quote}
+% |\begin{SwitchEnv}{|\meta{string}|}|\\
+% \quad |\Case{|\meta{val1}|}{|\meta{code1}|}|\\
+% \quad |\Case{|\meta{val2}|}{|\meta{code2}|}|\\
+% \quad |\Default{|\meta{default code}|}|\\
+% |\end{SwitchEnv}|
+% \end{quote}
+%
+% \StopEventually{\PrintIndex}
+%
+% \section{Implementation}
+%
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+%
+% \begin{macro}{\Switch}
+% A LaTeX2e wrapper for |\str_case:nnF|.
+%    \begin{macrocode}
+\NewDocumentCommand{\Switch}{m m O{}}{
+    \str_case:nnF {#1} {#2} {#3}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\IntSwitch}
+% A LaTeX2e wrapper for |\int_case:nnF|.
+%    \begin{macrocode}
+\NewDocumentCommand{\IntSwitch}{m m O{}}{
+    \int_case:nnF {#1} {#2} {#3}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Case}
+% Appends a case to the current list of cases.
+%    \begin{macrocode}
+\NewDocumentCommand{\Case}{m m}{
+    \tl_put_right:Nn \l_switchcase_cases_tl { {#1}{#2} }
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Default}
+% Sets the default code to execute if no case matches.
+%    \begin{macrocode}
+\NewDocumentCommand{\Default}{m}{
+    \tl_set:Nn \l_switchcase_default_tl { #1 }
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{environment}{SwitchEnv}
+% Environment wrapper for a string-based switch-case selection.
+%    \begin{macrocode}
+\NewDocumentEnvironment{SwitchEnv}{m}{
+    \tl_set:Nn \l_switchcase_input_tl {#1}
+    \tl_clear:N \l_switchcase_cases_tl
+    \tl_clear:N \l_switchcase_default_tl
+}{
+    \exp_args:NVV \str_case:nnF \l_switchcase_input_tl \l_switchcase_cases_tl { \l_switchcase_default_tl }
+}
+%    \end{macrocode}
+% \end{environment}
+%
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
+%
+% \Finale
+\endinput

@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage{switchcase}
+\usepackage{pgffor}
+
+\begin{document}
+
+\section{Testing Global Collection in Loop}
+\begin{SwitchEnv}{B}
+    \foreach \x in {A, B, C}{
+        \Case{\x}{Found item \x}
+    }
+\end{SwitchEnv}
+
+\section{Testing Nested Environments}
+\begin{SwitchEnv}{Outer}
+    \Case{Outer}{
+        Outer Result.
+        \begin{SwitchEnv}{Inner}
+            \Case{Inner}{Inner Result.}
+        \end{SwitchEnv}
+    }
+\end{SwitchEnv}
+
+\end{document}
