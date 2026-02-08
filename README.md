@@ -50,6 +50,12 @@ The `SwitchEnv` environment provides a more modular approach, especially useful 
     \Case{TargetValue}{This code will execute!}
     \Default{Fallback code if no match is found.}
 \end{SwitchEnv}
+
+\begin{SwitchIntEnv}{1}
+    \Case{1}{This is case 1.}
+    \Case{2}{This is case 2.}
+    \Default{This is default.}
+\end{SwitchIntEnv}
 ```
 
 ### Advanced: Nesting and Loops
@@ -64,12 +70,6 @@ The `SwitchEnv` environment provides a more modular approach, especially useful 
         \end{SwitchEnv}
     }
 \end{SwitchEnv}
-
-\begin{SwitchIntEnv}{1}
-    \Case{1}{This is case 1.}
-    \Case{2}{This is case 2.}
-    \Default{This is default.}
-\end{SwitchIntEnv}
 ```
 
 ## License
