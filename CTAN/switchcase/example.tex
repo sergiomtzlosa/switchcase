@@ -1,0 +1,81 @@
+\documentclass{article}
+\usepackage{switchcase}
+
+\begin{document}
+
+\section*{Testing String Switch}
+
+Input "Apple": 
+\Switch{Apple}{
+    {Apple} {This is an apple.}
+    {Orange}{This is an orange.}
+    {Banana}{This is a banana.}
+}[Fruit not found!]
+
+\medskip
+
+Input "Grape":
+\Switch{Grape}{
+    {Apple} {This is an apple.}
+    {Orange}{This is an orange.}
+    {Banana}{This is a banana.}
+}[Fruit not found!]
+
+\section*{Testing Integer Switch}
+
+Input "2":
+\IntSwitch{2}{
+    {1} {Number one.}
+    {2} {Number two.}
+    {3} {Number three.}
+}[Other number.]
+
+\medskip
+
+Input "5":
+\IntSwitch{5}{
+    {1} {Number one.}
+    {2} {Number two.}
+    {3} {Number three.}
+}[Other number.]
+
+\section*{Testing Switch Environment}
+
+Input "Apple":
+\begin{SwitchEnv}{Apple}
+    \Case{Apple}{This is an apple in an environment.}
+    \Case{Orange}{This is an orange in an environment.}
+    \Default{Fruit not found!}
+\end{SwitchEnv}
+
+\medskip
+
+Input "Grape":
+\begin{SwitchEnv}{Grape}
+    \Case{Apple}{This is an apple in an environment.}
+    \Case{Orange}{This is an orange in an environment.}
+    \Default{Fruit not found!}
+\end{SwitchEnv}
+
+\def\fruit{Apple}
+\begin{SwitchEnv}{\fruit}
+    \Case{Apple}{This is an apple in an environment.}
+    \Case{Orange}{This is an orange in an environment.}
+    \Default{Fruit not found!}
+\end{SwitchEnv}
+
+\def\fruitItem{Apple}
+\Switch{\fruitItem}{
+    {Apple} {This is an apple.}
+    {Orange}{This is an orange.}
+    {Banana}{This is a banana.}
+}[Fruit not found!]
+
+\def\myumber{3}
+\IntSwitch{\myumber}{
+    {1} {Number one.}
+    {2} {Number two.}
+    {3} {Number three.}
+}[Other number.]
+
+\end{document}
