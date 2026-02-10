@@ -64,4 +64,18 @@ Input "Grape":
     \Default{Fruit not found!}
 \end{SwitchEnv}
 
+\def\fruitItem{Apple}
+\Switch{\fruitItem}{
+    {Apple} {This is an apple.}
+    {Orange}{This is an orange.}
+    {Banana}{This is a banana.}
+}[Fruit not found!]
+
+\def\myumber{3}
+\IntSwitch{\myumber}{
+    {1} {Number one.}
+    {2} {Number two.}
+    {3} {Number three.}
+}[Other number.]
+
 \end{document}

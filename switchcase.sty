@@ -34,13 +34,13 @@
 \tl_new:N \l_switchcase_tmpb_tl
 \box_new:N \l_switchcase_junk_box
 \NewDocumentCommand{\Switch}{m +m +O{}}{
-    \tl_set:Nn \l_switchcase_tmpa_tl {#1}
+    \tl_set:Nx \l_switchcase_tmpa_tl {#1}
     \tl_trim_spaces:N \l_switchcase_tmpa_tl
     \exp_args:No \str_case:nnF { \l_switchcase_tmpa_tl } {#2} {#3}
     \ignorespaces
 }
 \NewDocumentCommand{\IntSwitch}{m +m +O{}}{
-    \tl_set:Nn \l_switchcase_tmpa_tl {#1}
+    \tl_set:Nx \l_switchcase_tmpa_tl {#1}
     \tl_trim_spaces:N \l_switchcase_tmpa_tl
     \exp_args:No \int_case:nnF { \l_switchcase_tmpa_tl } {#2} {#3}
     \ignorespaces
