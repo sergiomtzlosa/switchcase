@@ -57,4 +57,11 @@ Input "Grape":
     \Default{Fruit not found!}
 \end{SwitchEnv}
 
+\def\fruit{Apple}
+\begin{SwitchEnv}{\fruit}
+    \Case{Apple}{This is an apple in an environment.}
+    \Case{Orange}{This is an orange in an environment.}
+    \Default{Fruit not found!}
+\end{SwitchEnv}
+
 \end{document}
